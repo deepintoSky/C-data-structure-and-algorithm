@@ -4,11 +4,12 @@
 #include <iostream>  
 #include<cstring>
 #include <math.h>
+// #include <vector>
 #include <float.h>
 
 using namespace std;
 
-typedef enum { UNKNOWN, KNOWN} VStatus; //顶点状态
+typedef enum { UNKNOWN, KNOWN, VISITED} VStatus; //顶点状态
 
 template <typename T>
 struct Vertex
@@ -16,8 +17,7 @@ struct Vertex
     T name;       //地点名称
     T information; //地点信息
     float location[2]; //地点全局坐标
-    int visit_order, parentV; //访问顺序和父节点
-    float F, G, H;//A*打分变量
+    int visit_order; //访问顺序
     VStatus status; 
 	
 
@@ -32,6 +32,13 @@ struct Edge
 	
 };
 
+struct AstarNode
+{
+    int index;//地点下标
+    float F, G, H;//A*打分变量
+    int parentV = -1;//父节点
+    VStatus status;
+};
 
 class TourGuide{
 
@@ -44,6 +51,7 @@ class TourGuide{
   int path[15][15]; // 路径矩阵
   int pathN[15]={0}, path_temp[15];    //最佳访问路径
   float pathLength;   //目前最佳方位路径长度
+  AstarNode temp_list[15];
 
 	Vertex<string> place[15] = { //顶点，按从下到上，从左到右存储
     {"T6栋", "教学楼VI", {15, 0}},
@@ -255,22 +263,69 @@ class TourGuide{
     }
   }
 
-  // void A_star(string data){
-  //   // 初始化
-  //   for(int i = 0; i < VexNum; i++)
-	// 	{
-	// 		place[i].F = INF;
-  //     place[i].G = INF;
-  //     place[i].H = INF;
-	// 		place[i].parentV = -1;
-	// 		place[i].status = UNKNOWN;
-	// 	}
+  void A_star(int start, int end){
+    // 初始化
+    // AstarNode temp_list[VexNum];
+    for(int i = 0; i < VexNum; i++)
+		{
+      temp_list[i].status = KNOWN;
+      temp_list[i].index = -1;			
+		}
 
-  //   int open_list[VexNum], close_list[VexNum];
-  //   int index = findVex(data);
+    int iterate = start;
+    temp_list[iterate].index = iterate;
+    temp_list[iterate].G = 0;
+    temp_list[iterate].status = UNKNOWN;
+    while(!Astar_ifFinished(temp_list)){
+      if(temp_list[end].index == end)  break;//终点进入列表则退出
+      // 遍历该顶点的所有邻接顶点
+      float minF = INF;
+      int minF_index = -1;
+      for (int i = findFirstNeighbor(iterate); i >= 0; i = findNextNeighbor(iterate, i)){
+        if(temp_list[i].index != i && temp_list[i].status != VISITED){//判断点是否在列表里且未关闭
+          temp_list[i].index = i;
+          // cout << "input" << place[i].name << endl;
+          temp_list[i].status = UNKNOWN;
+          temp_list[i].G = INF;
+          temp_list[i].F = INF;
+          float delta_x = place[i].location[0] - place[end].location[0];//后地点相对于前者的水平距离
+          float delta_y = place[i].location[1] - place[end].location[1];//后地点相对于前者的垂直距离
+          temp_list[i].H = sqrt(delta_x*delta_x + delta_y*delta_y);
+        }
+        //更新邻居节点的分值,并储存最小F下标
+        if(temp_list[i].status == UNKNOWN){
+          if(temp_list[i].G > temp_list[iterate].G + road[iterate][i]){
+            temp_list[i].G = temp_list[iterate].G + road[iterate][i];
+            temp_list[i].F = temp_list[i].G + temp_list[i].H;
+            temp_list[i].parentV = iterate;  
+          }
+          // cout << "parent" << temp_list[i].parentV << "\t";  
+        } 
+      } 
+      temp_list[iterate].status = VISITED;//关闭该节点
+      for(int i = 0; i < VexNum; i++){//查找列表中最小F节点
+        if(temp_list[i].status == UNKNOWN){
+          if(minF > temp_list[i].F){
+            minF = temp_list[i].F;
+            minF_index = i;
+          }
+        }
+      }
+      iterate = minF_index;
+      // cout << "iterate"<< place[iterate].name << endl;
+    }
+  }
 
-  // }
+  //判断是否已经处理完毕
+  bool Astar_ifFinished(AstarNode list[]){
+    for(int i = 0; i < VexNum; i++){
+      if(list[i].status == UNKNOWN)
+        return false;
+    }
+    return true;
+  }
 
+  
 
   // 递归得到节点之间最短路径
   void getPath(int start, int end){
@@ -304,23 +359,62 @@ class TourGuide{
     return min_index;
   }
 
-  void AskRoad_fromX(string data){
+  void AskRoad_fromX(string data, char method){
     float minDist = INF;
     int index = findVex(data);
-    Floyd();
-    for(int i = 0; i < VexNum; i++){
-      place[i].status = UNKNOWN;
-    }
+    if(method == 'F'){
+      Floyd();
+      for(int i = 0; i < VexNum; i++){
+        place[i].status = UNKNOWN;
+      }
     
-    for(int i = findMinDist_index(index); i != -1; i = findMinDist_index(index)){
-      cout << "|" << endl;
-      cout << "|the shortest path from " << place[index].name << "to " << place[i].name << "is:" << endl;
-      cout << "|  ";
-      getPath(index, i);
-      cout << endl;
-      cout << "|the distance is " << dist[index][i]*FACTOR << "m" << endl;
-      place[i].status = KNOWN;     
+      for(int i = findMinDist_index(index); i != -1; i = findMinDist_index(index)){
+        cout << "|" << endl;
+        cout << "|the shortest path from " << place[index].name << "to " << place[i].name << "is:" << endl;
+        cout << "|  ";
+        getPath(index, i);
+        cout << endl;
+        cout << "|the distance is " << dist[index][i]*FACTOR << "m" << endl;
+        place[i].status = KNOWN;     
+      }
     }
+    else if(method == 'A'){
+      for(int i = 0; i < VexNum; i++){
+        if(i != index){
+          A_star(index, i);    
+        }
+        place[i].status = UNKNOWN;
+      }
+      for(int k = 1; k < VexNum; k++){
+        minDist = INF;
+        int min_index = -1;
+        for(int i = 0; i < VexNum; i++){//找最短路径
+          if(minDist > temp_list[i].G && place[i].status == UNKNOWN && i != index){
+            minDist = temp_list[i].G;
+            min_index = i;
+          }
+        }
+        int j = min_index;
+        cout << "|" << endl;
+        cout << "|the shortest path from " << place[index].name << "to " << place[j].name << "is:" << endl;
+        cout << "|  ";
+        while(j != -1){
+          cout << place[j].name;
+          j = temp_list[j].parentV;
+          if(j != -1) 
+            cout <<" <--- ";
+        }
+        cout << endl;
+        cout << "|the distance is " << temp_list[min_index].G*FACTOR << "m" << endl;
+        place[min_index].status = KNOWN;
+      }
+    }
+    else{
+      cout << "|" << endl;
+      cout << "|sorry， the method you entered does not exist" << endl;
+      cout << "|" << endl;
+    }
+ 
   }
 
 
@@ -438,7 +532,7 @@ class TourGuide{
         cout << endl;
         cout << "|" << endl;
         cout << "|The step by step detailed information is:" << endl;
-        // cout << "|                                                                               |" << endl;
+        cout << "|                                                                               |" << endl;
         for(int i = 0; i < num - 1; i++){
           print_roadInformation(place[pathN[i]].name, place[pathN[i+1]].name);
         }

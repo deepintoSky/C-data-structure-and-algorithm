@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/jack/project/c++_ds/project/TourGuide.cpp" "/home/jack/project/c++_ds/project/build/CMakeFiles/TourGuide.dir/TourGuide.cpp.o"
+  "/home/jack/project/data-structure-and-algorithm/project/TourGuide.cpp" "/home/jack/project/data-structure-and-algorithm/project/build/CMakeFiles/TourGuide.dir/TourGuide.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

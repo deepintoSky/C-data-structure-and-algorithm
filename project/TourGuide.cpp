@@ -57,12 +57,19 @@ int main()
 		else if(choose_index == '4'){
 			cout << "|----------------Ask for ways from anywhere to other places---------------------|" << endl;
 			string data4;
+			char method;
 			cout << "|  please insert name of place where you want to konw the shortest road to      |" << endl;
 			cout << "|others places:                                                                 |" << endl;
+			cout << "|";
 			cin >> data4;
-			Guide1.AskRoad_fromX(data4);
-			// Guide1.AskRoad_fromX("B栋");
+			cout << "|  In this part, you can choose the algorithm: enter A to select the A* algorit-|" << endl;
+			cout << "|-hm and F to select the Floyd algorithm.Please enter the method you need below:|" << endl;
+			cout << "|";
+			cin >> method;
+			Guide1.AskRoad_fromX(data4, method);
+			// Guide1.AskRoad_fromX("B栋", 'A');
 			// Guide1.printGraph();
+			cout << "|-------------------------------------------------------------------------------|" << endl;
 		}
 		else if(choose_index == '5'){
 			break;

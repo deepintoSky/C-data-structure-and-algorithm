@@ -6,13 +6,13 @@
 
 #IncludeRegexTransform: 
 
-/home/jack/project/c++_ds/project/TourGuide.cpp
+/home/jack/project/data-structure-and-algorithm/project/TourGuide.cpp
 iostream
 -
 TourGuide.h
-/home/jack/project/c++_ds/project/TourGuide.h
+/home/jack/project/data-structure-and-algorithm/project/TourGuide.h
 
-/home/jack/project/c++_ds/project/TourGuide.h
+/home/jack/project/data-structure-and-algorithm/project/TourGuide.h
 iostream
 -
 cstring
