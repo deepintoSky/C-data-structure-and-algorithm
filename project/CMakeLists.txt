@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.0)
+add_compile_options(-std=c++11)
+project(TourGuide)
+SET(SRC_TourGuide TourGuide.cpp )
+add_executable(TourGuide ${SRC_TourGuide})

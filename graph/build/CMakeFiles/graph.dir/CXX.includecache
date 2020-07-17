@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/jack/project/c++_ds/graph/graph.cpp
+iostream
+-
+graph.h
+/home/jack/project/c++_ds/graph/graph.h
+
+/home/jack/project/c++_ds/graph/graph.h
+iostream
+-
+queue
+-
+

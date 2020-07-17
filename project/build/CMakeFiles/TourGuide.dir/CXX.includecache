@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/jack/project/c++_ds/project/TourGuide.cpp
+iostream
+-
+TourGuide.h
+/home/jack/project/c++_ds/project/TourGuide.h
+
+/home/jack/project/c++_ds/project/TourGuide.h
+iostream
+-
+cstring
+-
+math.h
+-
+float.h
+-
+

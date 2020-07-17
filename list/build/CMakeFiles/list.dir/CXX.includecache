@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/jack/project/c++_ds/list/list.cpp
+iostream
+-
+list.h
+/home/jack/project/c++_ds/list/list.h
+
+/home/jack/project/c++_ds/list/list.h
+iostream
+-
+

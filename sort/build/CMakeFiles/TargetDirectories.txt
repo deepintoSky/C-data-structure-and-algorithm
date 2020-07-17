@@ -1,0 +1,3 @@
+/home/jack/project/c++_ds/sort/build/CMakeFiles/rebuild_cache.dir
+/home/jack/project/c++_ds/sort/build/CMakeFiles/sort.dir
+/home/jack/project/c++_ds/sort/build/CMakeFiles/edit_cache.dir

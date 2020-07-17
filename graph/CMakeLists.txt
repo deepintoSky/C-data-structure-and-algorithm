@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.0)
+add_compile_options(-std=c++11)
+project(graph)
+SET(SRC_graph graph.cpp )
+add_executable(graph ${SRC_graph})
